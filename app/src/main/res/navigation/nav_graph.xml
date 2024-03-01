@@ -3,26 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
+    app:startDestination="@id/activity_main">
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.bertan.learnandroidappdevelopment.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/activity_main"
+        android:name="com.bertan.learnandroidappdevelopment.MainActivity"
+        android:label="@string/activity_main"
+        tools:layout="@layout/activity_main">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_activity_main_to_tutorial_activity"
+            app:destination="@id/tutorial" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.bertan.learnandroidappdevelopment.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/tutorial"
+        android:name="com.bertan.learnandroidappdevelopment.Tutorial"
+        android:label="@string/tutorial"
+        tools:layout="@layout/tutorial_activity">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_tutorial_activity_to_activity_main"
+            app:destination="@id/activity_main" />
     </fragment>
 </navigation>

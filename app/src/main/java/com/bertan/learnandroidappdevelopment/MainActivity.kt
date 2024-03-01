@@ -3,6 +3,7 @@ package com.bertan.learnandroidappdevelopment
 import android.os.Bundle
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        val b = findViewById<ImageButton>(R.id.tutorialButton)
 
         deleteItem(lvTodoList)
 

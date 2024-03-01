@@ -45,4 +45,6 @@
     </string>
     <string name="input_1" />
     <string name="input_2" />
+    <string name="activity_main" />
+    <string name="tutorial" />
 </resources>
