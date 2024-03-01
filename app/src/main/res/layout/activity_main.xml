@@ -31,7 +31,7 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:title="Einkaufsliste"
+            app:title="Shopping list"
             app:titleTextColor="#F8FAFA" />
 
         <ListView
