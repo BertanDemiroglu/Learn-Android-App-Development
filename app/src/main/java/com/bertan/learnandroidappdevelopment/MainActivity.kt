@@ -30,6 +30,20 @@ class MainActivity : AppCompatActivity() {
         shoppingItems = ArrayList()
         itemAdapter = CustomAdapter(this, shoppingItems)
         lvTodoList.adapter = itemAdapter
+
+        val selectedItems = mutableListOf<Pair<String, String>>()
+
+        lvTodoList.setOnItemClickListener { _, _, position, _ ->
+            val item = itemAdapter.getItem(position)
+            item?.let {
+                if (lvTodoList.isItemChecked(position)) {
+                    selectedItems.add(it)
+                } else {
+                    selectedItems.remove(it)
+                }
+            }
+        }
+
         deleteItem(lvTodoList)
 
         addItem(fab)
@@ -37,9 +51,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteItem(lvTodoList: ListView){
         lvTodoList.onItemLongClickListener = OnItemLongClickListener { _, _, pos, _ ->
-            shoppingItems.removeAt(pos)
-            itemAdapter.notifyDataSetChanged()
-            Toast.makeText(applicationContext, "Item deleted!", Toast.LENGTH_SHORT).show()
+            val alertDialog = AlertDialog.Builder(this).apply {
+                setTitle("Are you sure about deleting this item?")
+                setPositiveButton("Delete"){ _, _ ->
+                    shoppingItems.removeAt(pos)
+                    itemAdapter.notifyDataSetChanged()
+                    Toast.makeText(applicationContext, "Item deleted!", Toast.LENGTH_SHORT).show()
+                }
+                setNegativeButton("Cancel"){ _, _ ->
+                    Toast.makeText(applicationContext, "Deletion canceled", Toast.LENGTH_SHORT).show()
+                }
+            }
+            alertDialog.show()
             true
         }
     }
@@ -50,8 +73,7 @@ class MainActivity : AppCompatActivity() {
             val inputItem = view.findViewById<EditText>(R.id.editText1)
             val inputCount = view.findViewById<EditText>(R.id.editText2)
 
-
-            val builder = AlertDialog.Builder(this).apply {
+            val alertDialog = AlertDialog.Builder(this).apply {
                 setTitle("Add Items")
                 setView(view)
                 setPositiveButton("Add"){ _, _ ->
@@ -64,8 +86,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Closed", Toast.LENGTH_SHORT).show()
                 }
             }
-
-            builder.show()
+            alertDialog.show()
         }
     }
 }
