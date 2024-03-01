@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         deleteItem(lvTodoList)
 
         addItem(fab)
-        print(3)
     }
 
     private fun deleteItem(lvTodoList: ListView){
