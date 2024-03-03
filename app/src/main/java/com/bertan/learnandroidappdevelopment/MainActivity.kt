@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 setView(view)
                 setPositiveButton("Add"){ _, _ ->
                     if(inputItem.text.isNotBlank()){
-                        shoppingItems.add(Pair(inputItem.text.toString(), inputCount.text.toString()))
+                        shoppingItems.add(Pair(inputItem.text.toString().trim(), inputCount.text.toString().trim()))
                         itemAdapter.notifyDataSetChanged()
                     }
                 }
