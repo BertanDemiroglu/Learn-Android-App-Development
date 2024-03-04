@@ -3,4 +3,8 @@
     <item name="tutorialButton" type="id" />
     <item name="fragmentContainerView2" type="id" />
     <item name="activity_main" type="id" />
+    <item name="toolbar_menu" type="id" />
+    <item name="action_refresh" type="id" />
+    <item name="nav_graph" type="id" />
+    <item name="mainFragment" type="id" />
 </resources>
