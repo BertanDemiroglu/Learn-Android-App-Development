@@ -38,47 +38,6 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
     }
 
-    private fun deleteItem(lvTodoList: ListView){
-        lvTodoList.onItemLongClickListener = OnItemLongClickListener { _, _, pos, _ ->
-            val alertDialog = AlertDialog.Builder(this).apply {
-                setTitle("Are you sure about deleting this item?")
-                setPositiveButton("Delete"){ _, _ ->
-                    shoppingItems.removeAt(pos)
-                    itemAdapter.notifyDataSetChanged()
-                    Toast.makeText(applicationContext, "Item deleted!", Toast.LENGTH_SHORT).show()
-                }
-                setNegativeButton("Cancel"){ _, _ ->
-                    Toast.makeText(applicationContext, "Deletion canceled", Toast.LENGTH_SHORT).show()
-                }
-            }
-            alertDialog.show()
-            true
-        }
-    }
-
-    private fun addItem(fab: FloatingActionButton){
-        fab.setOnClickListener{
-            val view = layoutInflater.inflate(R.layout.dialog_custom_layout, null)
-            val inputItem = view.findViewById<EditText>(R.id.editText1)
-            val inputCount = view.findViewById<EditText>(R.id.editText2)
-
-            val alertDialog = AlertDialog.Builder(this).apply {
-                setTitle("Add Items")
-                setView(view)
-                setPositiveButton("Add"){ _, _ ->
-                    if(inputItem.text.isNotBlank()){
-                        shoppingItems.add(Pair(inputItem.text.toString().trim(), inputCount.text.toString().trim()))
-                        itemAdapter.notifyDataSetChanged()
-                    }
-                }
-                setNegativeButton("Close"){ _, _ ->
-                    Toast.makeText(applicationContext, "Closed", Toast.LENGTH_SHORT).show()
-                }
-            }
-            alertDialog.show()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
