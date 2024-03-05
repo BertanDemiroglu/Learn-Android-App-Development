@@ -1,15 +1,18 @@
 package com.bertan.learnandroidappdevelopment
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.bertan.learnandroidappdevelopment.databinding.ActivityMainBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -21,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fab: FloatingActionButton
     private lateinit var shoppingItems: ArrayList<Pair<String, String>>
     private lateinit var itemAdapter: CustomAdapter
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,4 +88,23 @@ class MainActivity : AppCompatActivity() {
             alertDialog.show()
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.action_tutorial -> {
+                navController.navigate(R.id.action_mainFragment_to_tutorialFragment)
+                true
+            }             // handle settings action
+            else -> false
+        }
+    }
+
+
+
+
 }

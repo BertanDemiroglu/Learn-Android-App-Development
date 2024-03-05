@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="MainActivity">
     <item
-        android:id="@+id/action_refresh"
+        android:id="@+id/action_tutorial"
         android:icon="@android:drawable/ic_menu_help"
-        android:title="Refresh"
+        android:title="Tutorial"
         app:showAsAction="always" />
 </menu>
