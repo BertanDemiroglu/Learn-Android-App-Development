@@ -19,6 +19,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="Tutorial" />
+        app:title="Tutorial"
+        app:titleCentered="true" />
 
 </FrameLayout>

@@ -31,21 +31,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbarMain)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
-        lvTodoList = findViewById(R.id.lvTodoList)
-        fab = findViewById(R.id.floatingActionButton)
-        shoppingItems = ArrayList()
-        itemAdapter = CustomAdapter(this, shoppingItems)
-        lvTodoList.adapter = itemAdapter
-
-        deleteItem(lvTodoList)
-
-        addItem(fab)
     }
 
     private fun deleteItem(lvTodoList: ListView){
