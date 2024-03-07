@@ -4,8 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="MainActivity">
     <item
+        android:id="@+id/action_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="Delete"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_tutorial"
         android:icon="@android:drawable/ic_menu_help"
         android:title="Tutorial"
         app:showAsAction="always" />
+
 </menu>

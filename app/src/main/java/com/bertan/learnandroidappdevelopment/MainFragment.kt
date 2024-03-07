@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -11,15 +14,17 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.util.Arrays
 
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), MenuProvider {
     private lateinit var lvTodoList: ListView
     private lateinit var fab: FloatingActionButton
     private lateinit var shoppingItems: ArrayList<Pair<String, String>>
@@ -31,6 +36,10 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
+
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
         lvTodoList = view.findViewById(R.id.lvTodoList)
         fab = view.findViewById(R.id.floatingActionButton)
 
@@ -46,7 +55,50 @@ class MainFragment : Fragment() {
         addItem(fab, requireContext())
         deleteItem(lvTodoList, requireContext())
 
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         return view
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        val mainActivity = activity as MainActivity
+        return when (menuItem.itemId) {
+            R.id.action_tutorial -> {
+                mainActivity.navController.navigate(R.id.action_mainFragment_to_tutorialFragment)
+                true
+            }
+            R.id.action_delete -> {
+                val alertDialog = AlertDialog.Builder(requireContext()).apply {
+                    setTitle("Are you sure about deleting all items?")
+                    setPositiveButton("Confirm"){_,_ ->
+                        shoppingItems.clear()
+                        itemAdapter.notifyDataSetChanged()
+                        saveShoppingItems()
+
+                        Toast.makeText(
+                            context.applicationContext,
+                            "Items deleted!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    setNegativeButton("Cancel"){_,_ ->
+                        Toast.makeText(
+                            context.applicationContext,
+                            "Deletion canceled",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                alertDialog.show()
+                true
+            }
+            else -> false
+        }
     }
 
     private fun loadShoppingItems(): ArrayList<Pair<String, String>> {

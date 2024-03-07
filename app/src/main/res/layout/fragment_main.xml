@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="Shopping list" />
 

@@ -10,16 +10,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="ssssssss" />
+        android:text="" />
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolbar"
+        android:id="@+id/toolBarTutorial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        android:visibility="visible"
+        app:navigationIcon="@android:drawable/ic_menu_revert"
         app:title="Tutorial"
-        app:titleCentered="true" />
+        app:titleCentered="true"
+        tools:visibility="visible" />
 
 </FrameLayout>
