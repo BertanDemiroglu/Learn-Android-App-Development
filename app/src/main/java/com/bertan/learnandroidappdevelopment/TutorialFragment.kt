@@ -14,8 +14,8 @@ class TutorialFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_tutorial, container, false)
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.toolBarTutorial)
+        val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.toolBarSettings)
         toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
