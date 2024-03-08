@@ -2,6 +2,7 @@ package com.bertan.learnandroidappdevelopment
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,6 +14,7 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
@@ -20,6 +22,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -36,9 +39,6 @@ class MainFragment : Fragment(), MenuProvider {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
-
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
         lvTodoList = view.findViewById(R.id.lvTodoList)
         fab = view.findViewById(R.id.floatingActionButton)
@@ -69,7 +69,7 @@ class MainFragment : Fragment(), MenuProvider {
         val mainActivity = activity as MainActivity
         return when (menuItem.itemId) {
             R.id.action_tutorial -> {
-                mainActivity.navController.navigate(R.id.action_mainFragment_to_tutorialFragment)
+                mainActivity.navController.navigate(R.id.action_mainFragment_to_settingsFragment)
                 true
             }
             R.id.action_delete -> {

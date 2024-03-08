@@ -10,7 +10,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_tutorial"
-        android:icon="@android:drawable/ic_menu_help"
+        android:icon="@android:drawable/ic_menu_manage"
         android:title="Tutorial"
         app:showAsAction="always" />
 

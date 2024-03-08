@@ -8,19 +8,18 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.bertan.learnandroidappdevelopment.MainFragment"
-        android:label="fragment_main"
+        android:label="Shopping list"
         tools:layout="@layout/fragment_main" >
         <action
-            android:id="@+id/action_mainFragment_to_tutorialFragment"
-            app:destination="@id/tutorialFragment" />
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/tutorialFragment"
-        android:name="com.bertan.learnandroidappdevelopment.TutorialFragment"
-        android:label="fragment_tutorial"
-        tools:layout="@layout/fragment_settings" >
+        android:id="@+id/settingsFragment"
+        android:name="com.bertan.learnandroidappdevelopment.SettingsFragment"
+        android:label="Settings">
         <action
-            android:id="@+id/action_tutorialFragment_to_mainFragment2"
+            android:id="@+id/action_settingsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

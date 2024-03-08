@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".TutorialFragment">
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
@@ -25,11 +24,11 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/materialToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="Shopping list" />
 
