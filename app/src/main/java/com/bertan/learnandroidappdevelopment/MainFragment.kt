@@ -2,7 +2,6 @@ package com.bertan.learnandroidappdevelopment
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -14,17 +13,19 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavController
 import androidx.preference.PreferenceManager
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.File
+
+
 
 
 class MainFragment : Fragment(), MenuProvider {
@@ -47,7 +48,7 @@ class MainFragment : Fragment(), MenuProvider {
         sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         // Load shopping items from SharedPreferences
-        shoppingItems = loadShoppingItems()
+        shoppingItems = loadShoppingItemsFromJsonFile(requireContext())
 
         itemAdapter = CustomAdapter(requireContext(), shoppingItems)
         lvTodoList.adapter = itemAdapter
@@ -57,6 +58,18 @@ class MainFragment : Fragment(), MenuProvider {
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        val darkModePreference = PreferenceManager.getDefaultSharedPreferences(requireContext())
+
+        val darkMode = darkModePreference.getBoolean("dark_mode", true)
+
+        if (darkMode) {
+            // Enable dark mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            // Disable dark mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
         return view
     }
@@ -78,7 +91,7 @@ class MainFragment : Fragment(), MenuProvider {
                     setPositiveButton("Confirm"){_,_ ->
                         shoppingItems.clear()
                         itemAdapter.notifyDataSetChanged()
-                        saveShoppingItems()
+                        saveShoppingItemsToJsonFile(requireContext(), shoppingItems)
 
                         Toast.makeText(
                             context.applicationContext,
@@ -101,17 +114,23 @@ class MainFragment : Fragment(), MenuProvider {
         }
     }
 
-    private fun loadShoppingItems(): ArrayList<Pair<String, String>> {
-        val savedItems = sharedPreferences.getStringSet("shoppingItems", HashSet()) ?: HashSet()
-        return ArrayList(savedItems.map { it.split(",") }.map { it[0] to it[1] })
+    private fun saveShoppingItemsToJsonFile(context: Context, items: List<Pair<String, String>>) {
+        val json = Gson().toJson(items)
+        File(context.filesDir, "shopping_items.json").apply {
+            writeText(json)
+        }
     }
 
-    private fun saveShoppingItems() {
-        val editor = sharedPreferences.edit()
-        val itemSet = HashSet(shoppingItems.map { "${it.first},${it.second}" })
-        editor.putStringSet("shoppingItems", itemSet)
-        editor.apply()
+    private fun loadShoppingItemsFromJsonFile(context: Context): ArrayList<Pair<String, String>> {
+        val file = File(context.filesDir, "shopping_items.json")
+        if (!file.exists()) {
+            return ArrayList()
+        }
+        val json = file.readText()
+        val itemType = object : TypeToken<List<Pair<String, String>>>() {}.type
+        return Gson().fromJson(json, itemType) ?: ArrayList()
     }
+
 
     private fun deleteItem(lvTodoList: ListView, context: Context) {
         lvTodoList.onItemLongClickListener =
@@ -121,7 +140,7 @@ class MainFragment : Fragment(), MenuProvider {
                     setPositiveButton("Delete") { _, _ ->
                         shoppingItems.removeAt(pos)
                         itemAdapter.notifyDataSetChanged()
-                        saveShoppingItems() // Save changes after deletion
+                        saveShoppingItemsToJsonFile(requireContext(), shoppingItems) // Save changes after deletion
                         Toast.makeText(
                             context.applicationContext,
                             "Item deleted!",
@@ -154,7 +173,7 @@ class MainFragment : Fragment(), MenuProvider {
                     if (inputItem.text.isNotBlank()) {
                         shoppingItems.add(Pair(inputItem.text.toString().trim(), inputCount.text.toString().trim()))
                         itemAdapter.notifyDataSetChanged()
-                        saveShoppingItems() // Save changes after addition
+                        saveShoppingItemsToJsonFile(requireContext(), shoppingItems) // Save changes after addition
                     }
                 }
                 setNegativeButton("Close") { _, _ ->

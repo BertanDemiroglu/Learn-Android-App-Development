@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
 import com.bertan.learnandroidappdevelopment.databinding.ActivityMainBinding
@@ -32,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         setupActionBarWithNavController(navController)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
