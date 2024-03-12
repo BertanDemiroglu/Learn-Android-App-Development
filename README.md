@@ -1,0 +1,1 @@
+[![CI](https://github.com/BertanDemiroglu/Learn-Android-App-Development/actions/workflows/blank.yml/badge.svg?branch=master)](https://github.com/BertanDemiroglu/Learn-Android-App-Development/actions/workflows/blank.yml)
