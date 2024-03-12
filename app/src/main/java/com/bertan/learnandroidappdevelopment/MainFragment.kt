@@ -1,7 +1,7 @@
 package com.bertan.learnandroidappdevelopment
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -26,14 +26,14 @@ import com.google.gson.reflect.TypeToken
 import java.io.File
 
 
-
-
+/**
+ * MainFragment is the main logic of the app.
+ */
 class MainFragment : Fragment(), MenuProvider {
     private lateinit var lvTodoList: ListView
     private lateinit var fab: FloatingActionButton
     private lateinit var shoppingItems: ArrayList<Pair<String, String>>
     private lateinit var itemAdapter: CustomAdapter
-    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,26 +41,32 @@ class MainFragment : Fragment(), MenuProvider {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
+        // Load shopping items from JsonFile
+        shoppingItems = loadShoppingItemsFromJsonFile(requireContext())
+        //get all views
         lvTodoList = view.findViewById(R.id.lvTodoList)
         fab = view.findViewById(R.id.floatingActionButton)
-
-        // Initialize SharedPreferences
-        sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-
-        // Load shopping items from SharedPreferences
-        shoppingItems = loadShoppingItemsFromJsonFile(requireContext())
-
+        //initialize the CustomAdapter
         itemAdapter = CustomAdapter(requireContext(), shoppingItems)
         lvTodoList.adapter = itemAdapter
 
         addItem(fab, requireContext())
         deleteItem(lvTodoList, requireContext())
 
+        //required for app bar
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        val darkModePreference = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        loadSettings()
 
+        return view
+    }
+
+    /**
+     * Loads all settings(loads dark mode)
+     */
+    private fun loadSettings(){
+        val darkModePreference = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val darkMode = darkModePreference.getBoolean("dark_mode", true)
 
         if (darkMode) {
@@ -70,8 +76,6 @@ class MainFragment : Fragment(), MenuProvider {
             // Disable dark mode
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-
-        return view
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -81,10 +85,12 @@ class MainFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         val mainActivity = activity as MainActivity
         return when (menuItem.itemId) {
-            R.id.action_tutorial -> {
+            //go to settings fragment
+            R.id.action_settings -> {
                 mainActivity.navController.navigate(R.id.action_mainFragment_to_settingsFragment)
                 true
             }
+            //button to delete all items
             R.id.action_delete -> {
                 val alertDialog = AlertDialog.Builder(requireContext()).apply {
                     setTitle("Are you sure about deleting all items?")
@@ -114,6 +120,11 @@ class MainFragment : Fragment(), MenuProvider {
         }
     }
 
+    /**
+     * Saves all items in [shoppingItems] in a Json file.
+     * @param context current context
+     * @param items shopping items
+     */
     private fun saveShoppingItemsToJsonFile(context: Context, items: List<Pair<String, String>>) {
         val json = Gson().toJson(items)
         File(context.filesDir, "shopping_items.json").apply {
@@ -121,17 +132,25 @@ class MainFragment : Fragment(), MenuProvider {
         }
     }
 
+    /**
+     * Loads all shopping items from a Json file if it exists.
+     * @param context current context
+     * @return Json file with shopping items
+     */
     private fun loadShoppingItemsFromJsonFile(context: Context): ArrayList<Pair<String, String>> {
         val file = File(context.filesDir, "shopping_items.json")
-        if (!file.exists()) {
-            return ArrayList()
-        }
+        if(!file.exists()) return ArrayList()
         val json = file.readText()
         val itemType = object : TypeToken<List<Pair<String, String>>>() {}.type
-        return Gson().fromJson(json, itemType) ?: ArrayList()
+        return Gson().fromJson(json, itemType)
     }
 
 
+    /**
+     * Deletes a selected item by long clicking on it.
+     * @param lvTodoList the current listView
+     * @param context current context
+     */
     private fun deleteItem(lvTodoList: ListView, context: Context) {
         lvTodoList.onItemLongClickListener =
             AdapterView.OnItemLongClickListener { _, _, pos, _ ->
@@ -160,6 +179,12 @@ class MainFragment : Fragment(), MenuProvider {
             }
     }
 
+    /**
+     * Adds item with optional count number
+     * @param fab current FloatingActionButton
+     * @param context current context
+     */
+    @SuppressLint("InflateParams")
     private fun addItem(fab: FloatingActionButton, context: Context) {
         fab.setOnClickListener {
             val view = layoutInflater.inflate(R.layout.dialog_custom_layout, null)
@@ -171,13 +196,15 @@ class MainFragment : Fragment(), MenuProvider {
                 setView(view)
                 setPositiveButton("Add") { _, _ ->
                     if (inputItem.text.isNotBlank()) {
-                        shoppingItems.add(Pair(inputItem.text.toString().trim(), inputCount.text.toString().trim()))
+                        shoppingItems.add(Pair(inputItem.text.toString().trim(),
+                            inputCount.text.toString().trim()))
                         itemAdapter.notifyDataSetChanged()
                         saveShoppingItemsToJsonFile(requireContext(), shoppingItems) // Save changes after addition
                     }
                 }
                 setNegativeButton("Close") { _, _ ->
-                    Toast.makeText(context.applicationContext, "Closed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context.applicationContext, "Closed",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
             alertDialog.show()

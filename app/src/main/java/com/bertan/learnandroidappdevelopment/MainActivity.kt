@@ -1,19 +1,16 @@
 package com.bertan.learnandroidappdevelopment
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.preference.PreferenceManager
-import androidx.preference.SwitchPreference
-import androidx.preference.SwitchPreferenceCompat
 import com.bertan.learnandroidappdevelopment.databinding.ActivityMainBinding
 import com.google.android.material.appbar.MaterialToolbar
 
+/**
+ * Main activity manages the navigation of the app.
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

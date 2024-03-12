@@ -1,5 +1,6 @@
 package com.bertan.learnandroidappdevelopment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +9,14 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import java.lang.RuntimeException
 
+/**
+ * Custom adapter which allows a AlertDialog with two inputs(One main item and a sub item) using
+ * [android.R.layout.simple_list_item_2]
+ */
 class CustomAdapter(context: Context, items: List<Pair<String, String>>) :
     ArrayAdapter<Pair<String, String>>(context, android.R.layout.simple_list_item_2, items) {
 
+    @SuppressLint("InflateParams")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
         if (view == null) {
