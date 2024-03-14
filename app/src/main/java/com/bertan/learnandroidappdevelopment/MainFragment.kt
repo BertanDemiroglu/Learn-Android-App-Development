@@ -92,28 +92,7 @@ class MainFragment : Fragment(), MenuProvider {
             }
             //button to delete all items
             R.id.action_delete -> {
-                val alertDialog = AlertDialog.Builder(requireContext()).apply {
-                    setTitle("Are you sure about deleting all items?")
-                    setPositiveButton("Confirm"){_,_ ->
-                        shoppingItems.clear()
-                        itemAdapter.notifyDataSetChanged()
-                        saveShoppingItemsToJsonFile(requireContext(), shoppingItems)
-
-                        Toast.makeText(
-                            context.applicationContext,
-                            "Items deleted!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    setNegativeButton("Cancel"){_,_ ->
-                        Toast.makeText(
-                            context.applicationContext,
-                            "Deletion canceled",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                alertDialog.show()
+                deleteAll()
                 true
             }
             else -> false
@@ -125,7 +104,7 @@ class MainFragment : Fragment(), MenuProvider {
      * @param context current context
      * @param items shopping items
      */
-    private fun saveShoppingItemsToJsonFile(context: Context, items: List<Pair<String, String>>) {
+    fun saveShoppingItemsToJsonFile(context: Context, items: List<Pair<String, String>>) {
         val json = Gson().toJson(items)
         File(context.filesDir, "shopping_items.json").apply {
             writeText(json)
@@ -137,7 +116,7 @@ class MainFragment : Fragment(), MenuProvider {
      * @param context current context
      * @return Json file with shopping items
      */
-    private fun loadShoppingItemsFromJsonFile(context: Context): ArrayList<Pair<String, String>> {
+    fun loadShoppingItemsFromJsonFile(context: Context): ArrayList<Pair<String, String>> {
         val file = File(context.filesDir, "shopping_items.json")
         if(!file.exists()) return ArrayList()
         val json = file.readText()
@@ -180,6 +159,34 @@ class MainFragment : Fragment(), MenuProvider {
     }
 
     /**
+     * Deletes all items.
+     */
+    private fun deleteAll(){
+        val alertDialog = AlertDialog.Builder(requireContext()).apply {
+            setTitle("Are you sure about deleting all items?")
+            setPositiveButton("Confirm"){_,_ ->
+                shoppingItems.clear()
+                itemAdapter.notifyDataSetChanged()
+                saveShoppingItemsToJsonFile(requireContext(), shoppingItems)
+
+                Toast.makeText(
+                    context.applicationContext,
+                    "Items deleted!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            setNegativeButton("Cancel"){_,_ ->
+                Toast.makeText(
+                    context.applicationContext,
+                    "Deletion canceled",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        alertDialog.show()
+    }
+
+    /**
      * Adds item with optional count number
      * @param fab current FloatingActionButton
      * @param context current context
@@ -195,11 +202,17 @@ class MainFragment : Fragment(), MenuProvider {
                 setTitle("Add Items")
                 setView(view)
                 setPositiveButton("Add") { _, _ ->
-                    if (inputItem.text.isNotBlank()) {
+                    if (inputItem.text.isNotBlank() && inputCount.text.isNotBlank()
+                        && inputCount.text.toString().matches("-?\\d+".toRegex()) //check if string is number
+                        && inputCount.text.toString().toInt() > 0) {
                         shoppingItems.add(Pair(inputItem.text.toString().trim(),
                             inputCount.text.toString().trim()))
                         itemAdapter.notifyDataSetChanged()
-                        saveShoppingItemsToJsonFile(requireContext(), shoppingItems) // Save changes after addition
+                        saveShoppingItemsToJsonFile(requireContext(), shoppingItems) // Save changes
+                    } else {
+                        Toast.makeText(context.applicationContext,
+                            "No blanks inputs and no negative numbers or 0 are allowed!",
+                            Toast.LENGTH_SHORT).show()
                     }
                 }
                 setNegativeButton("Close") { _, _ ->
